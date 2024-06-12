@@ -1,0 +1,37 @@
+package com.entidades.buenSabor.presentation.rest;
+
+import com.entidades.buenSabor.business.facade.Imp.PedidoFacadeImp;
+import com.entidades.buenSabor.domain.dto.Pedido.PedidoCreateDto;
+import com.entidades.buenSabor.domain.dto.Pedido.PedidoDto;
+import com.entidades.buenSabor.domain.entities.Pedido;
+import com.entidades.buenSabor.domain.enums.Estado;
+import com.entidades.buenSabor.presentation.rest.Base.BaseControllerImp;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/pedido")
+public class PedidoController extends BaseControllerImp<Pedido, PedidoDto, PedidoCreateDto,PedidoCreateDto,Long, PedidoFacadeImp> {
+    public PedidoController(PedidoFacadeImp facade) {
+        super(facade);
+    }
+
+    @PutMapping("/cambiaEstado/{id}")
+    public ResponseEntity<PedidoDto> cambiaEstado(@RequestBody Estado estado,@PathVariable Long id ) {
+        return ResponseEntity.ok(facade.cambiaEstado(estado, id));
+    }
+
+    @GetMapping("/en-preparacion")
+    public ResponseEntity<List<PedidoDto>> getPedidosEnPreparacion() {
+        List<PedidoDto> pedidosEnPreparacion = facade.getPedidosEnPreparacion();
+        return ResponseEntity.ok(pedidosEnPreparacion);
+    }
+
+    @GetMapping("/findByEstado")
+    public ResponseEntity<List<PedidoDto>> findByEstado(@RequestParam Estado estado) {
+        return ResponseEntity.ok(facade.findByEstado(estado));
+    }
+}
